@@ -6,10 +6,12 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
+
 @NoArgsConstructor
-public  class ValidationService {
+public class ValidationService {
     private static final LocalDate date = LocalDate.of(1895, 12, 28);
-    public static void validateFilm(Film film){
+
+    public static void validateFilm(Film film) {
         if (film.getName() == null || film.getName().isEmpty()) {
             throw new ValidationException("Name не может быть пустым!");
         }
@@ -23,6 +25,7 @@ public  class ValidationService {
             throw new ValidationException("Продолжительность фильма должна быть положительной!");
         }
     }
+
     public static void validateUser(User user) {
         if (user.getEmail() == null || user.getEmail().isEmpty()) {
             throw new ValidationException("Email не может быть пустым!");
