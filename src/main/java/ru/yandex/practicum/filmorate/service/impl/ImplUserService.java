@@ -3,14 +3,16 @@ package ru.yandex.practicum.filmorate.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.ObjectNotFoundException;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
-import java.util.*;
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static ru.yandex.practicum.filmorate.service.impl.ValidationService.validateFilm;
-import static ru.yandex.practicum.filmorate.service.impl.ValidationService.validateUser;
+import static ru.yandex.practicum.filmorate.service.impl.ValidationUserService.validateUser;
 
 @Slf4j
 @Service
@@ -19,7 +21,7 @@ public class ImplUserService implements UserService {
     private static int id;
 
     @Override
-    public User addUser(User user) {
+    public User addUser(@Valid User user) {
         validateUser(user);
         user.setId(generateUserId());
         userMap.put(user.getId(), user);
@@ -27,10 +29,9 @@ public class ImplUserService implements UserService {
     }
 
     @Override
-    public User updateUser(User user) {
+    public User updateUser(@Valid User user) {
         if (userMap.containsKey(user.getId())) {
             validateUser(user);
-            userMap.remove(user.getId());
             userMap.put(user.getId(), user);
             return user;
         }

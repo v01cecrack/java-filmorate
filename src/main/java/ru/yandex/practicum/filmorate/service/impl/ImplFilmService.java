@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static ru.yandex.practicum.filmorate.service.impl.ValidationService.validateFilm;
+import static ru.yandex.practicum.filmorate.service.impl.ValidationFilmService.validateFilm;
 
 @Service
 @Slf4j
@@ -32,7 +31,6 @@ public class ImplFilmService implements FilmService {
     public Film updateFilm(Film film) {
         if (filmMap.containsKey(film.getId())) {
             validateFilm(film);
-            filmMap.remove(film.getId());
             filmMap.put(film.getId(), film);
             return film;
         }
