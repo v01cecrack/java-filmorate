@@ -1,10 +1,9 @@
-package ru.yandex.practicum.filmorate.service.impl;
+package ru.yandex.practicum.filmorate.storage;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -12,11 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static ru.yandex.practicum.filmorate.service.impl.ValidationUserService.validateUser;
+import static ru.yandex.practicum.filmorate.service.ValidationUserService.validateUser;
 
 @Slf4j
-@Service
-public class ImplUserService implements UserService {
+@Component
+public class InMemoryUserStorage implements UserStorage {
     private final Map<Integer, User> userMap = new HashMap<>();
     private static int id;
 
@@ -42,6 +41,15 @@ public class ImplUserService implements UserService {
     @Override
     public List<User> getUsers() {
         return new ArrayList<>(userMap.values());
+    }
+
+    @Override
+    public User findUserById(int id) {
+        if (userMap.containsKey(id)) {
+            return userMap.get(id);
+        }
+        log.error("ERROR: ID введен неверно - такого пользователя не существует!");
+        throw new ObjectNotFoundException(String.format("Users id %d is not found", id));
     }
 
     private int generateUserId() {

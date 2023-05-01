@@ -1,23 +1,22 @@
-package ru.yandex.practicum.filmorate.service.impl;
+package ru.yandex.practicum.filmorate.storage;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static ru.yandex.practicum.filmorate.service.impl.ValidationFilmService.validateFilm;
+import static ru.yandex.practicum.filmorate.service.ValidationFilmService.validateFilm;
 
-@Service
 @Slf4j
-public class ImplFilmService implements FilmService {
-    private final Map<Integer, Film> filmMap = new HashMap<>();
+@Component
+public class InMemoryFilmStorage implements FilmStorage {
     private static int id;
+    private final Map<Integer, Film> filmMap = new HashMap<>();
 
     @Override
     public Film addFilm(Film film) {
@@ -41,6 +40,14 @@ public class ImplFilmService implements FilmService {
     @Override
     public List<Film> getFilms() {
         return new ArrayList<>(filmMap.values());
+    }
+
+    @Override
+    public Film findFilmById(int filmId) {
+        if (!filmMap.containsKey(filmId)) {
+            throw new ObjectNotFoundException(String.format("Film id %d is not found", filmId));
+        }
+        return filmMap.get(filmId);
     }
 
     private int generateFilmId() {

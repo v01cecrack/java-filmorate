@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.service.impl;
+package ru.yandex.practicum.filmorate.service;
 
 import lombok.NoArgsConstructor;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
