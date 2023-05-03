@@ -16,4 +16,13 @@ public class User {
     private String name;
     private LocalDate birthday;
     private Set<Integer> friends = new HashSet<>();
+
+    public void addFriend(int friendId) {
+        friends.add(friendId);
+    }
+
+    public boolean deleteFriend(int friendId) {
+        return friends.remove(friendId);
+    }
 }
+

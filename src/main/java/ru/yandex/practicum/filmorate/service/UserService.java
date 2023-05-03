@@ -21,15 +21,17 @@ public class UserService {
 
 
     public void addFriend(int userId, int friendId) {
-        userStorage.findUserById(friendId);
-        userStorage.findUserById(userId).getFriends().add(friendId);
-        userStorage.findUserById(friendId).getFriends().add(userId);
+        User user = userStorage.findUserById(userId);
+        User friend = userStorage.findUserById(friendId);
+        user.addFriend(friendId);
+        friend.addFriend(userId);
     }
 
     public void deleteFriend(int userId, int friendId) {
+        User user = userStorage.findUserById(userId);
         User friend = userStorage.findUserById(friendId);
-        userStorage.findUserById(userId).getFriends().remove(friendId);
-        friend.getFriends().remove(friendId);
+        user.deleteFriend(friendId);
+        friend.deleteFriend(userId);
     }
 
     public List<User> getMutualFriends(int userId, int friendId) {
