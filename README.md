@@ -1,7 +1,7 @@
 # java-filmorate
 Приложение Filmorate по оценке фильмов.
 ![ERD](https://github.com/v01cecrack/java-filmorate/blob/main/erdfilmorate.png)
-##Описание ER-диаграммы:
+## Описание ER-диаграммы:
 * `Таблица USER` - модель пользователя
 * `Таблица FILM` - модель фильма
 * `Таблица FILM_LIKES` - инфо о пользователях поставивших лайк фильму
