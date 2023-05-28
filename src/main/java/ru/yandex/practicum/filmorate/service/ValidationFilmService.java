@@ -1,16 +1,18 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
 
 @NoArgsConstructor
+@Service
 public class ValidationFilmService {
     private static final LocalDate date = LocalDate.of(1895, 12, 28);
 
-    public static void validateFilm(Film film) {
+    public void validateFilm(Film film) {
         if (film.getName() == null || film.getName().isEmpty()) {
             throw new ValidationException("Name не может быть пустым!");
         }

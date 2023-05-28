@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -8,8 +9,9 @@ import java.time.LocalDate;
 
 
 @NoArgsConstructor
+@Service
 public class ValidationUserService {
-    public static void validateUser(User user) {
+    public void validateUser(User user) {
         if (user.getEmail() == null || user.getEmail().isEmpty()) {
             throw new ValidationException("Email не может быть пустым!");
         }
