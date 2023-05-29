@@ -21,32 +21,32 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class FilmoRateApplicationTests {
     private final UserDbStorage userDbStorage;
     private final FilmDbStorage filmDbStorage;
-    Film film3 = Film.builder()
+    Film filmOne = Film.builder()
             .name("sdsds")
             .description("dadgfgfgffs")
             .releaseDate(LocalDate.of(2000, 12, 12))
             .duration(3)
             .mpa(RatingMpa.builder().id(1).build()).build();
-    Film film4 = Film.builder()
+    Film filmTwo = Film.builder()
             .id(1).name("sdsds")
             .description("dadgfgfgffs")
             .releaseDate(LocalDate.of(2000, 12, 12))
             .duration(3)
             .mpa(RatingMpa.builder().id(1).build()).build();
-    User user1 = User.builder().id(1)
+    User userOne = User.builder().id(1)
             .email("kkk@mail.ru")
             .login("rsrs").name("bobobo")
-            .birthday(LocalDate.of(2002,03,12))
+            .birthday(LocalDate.of(2002, 03, 12))
             .build();
 
     @Test
     void addFilmTest() {
-        assertEquals(film3, filmDbStorage.addFilm(film3));
+        assertEquals(filmOne, filmDbStorage.addFilm(filmOne));
     }
 
     @Test
     void updateFilmTest() {
-        assertEquals(film4, filmDbStorage.updateFilm(film4));
+        assertEquals(filmTwo, filmDbStorage.updateFilm(filmTwo));
     }
 
     @Test
@@ -56,26 +56,26 @@ class FilmoRateApplicationTests {
 
     @Test
     void findFilmByIdTest() {
-        assertEquals(film4, filmDbStorage.findFilmById(1));
+        assertEquals(filmTwo, filmDbStorage.findFilmById(1));
     }
 
     @Test
     void addUserTest() {
-        assertEquals(user1, userDbStorage.addUser(user1));
+        assertEquals(userOne, userDbStorage.addUser(userOne));
     }
 
     @Test
-    void updateUserTest(){
-        assertEquals(user1,userDbStorage.updateUser(user1));
+    void updateUserTest() {
+        assertEquals(userOne, userDbStorage.updateUser(userOne));
     }
 
     @Test
-    void getUsersTest(){
-        assertEquals(1,userDbStorage.getUsers().size());
+    void getUsersTest() {
+        assertEquals(1, userDbStorage.getUsers().size());
     }
 
     @Test
-    void findUserByIdTest(){
-        assertEquals(user1,userDbStorage.findUserById(1));
+    void findUserByIdTest() {
+        assertEquals(userOne, userDbStorage.findUserById(1));
     }
 }
