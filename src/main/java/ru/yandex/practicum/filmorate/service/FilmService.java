@@ -131,19 +131,26 @@ public class FilmService {
 
     private void setMpaGenreLikesForFilm(Film film, Set<RatingMpa> mpaList, List<Genre> genres,
                                          List<FilmGenre> filmGenres, Set<Likes> likes) {
+        Map<Integer, Genre> genreMap = new HashMap<>();
+        genres.forEach(g -> genreMap.put(g.getId(), g));
+
         List<Genre> genreByFilm = new ArrayList<>();
-        filmGenres.stream().filter(f -> f.getFilmId() == film.getId())
-                .forEach(f -> genreByFilm.add(
-                        new Genre(f.getGenreId(),
-                                genres.stream().filter(g -> g.getId() == f.getGenreId()).findAny().get().getName())));
+        filmGenres.stream()
+                .filter(f -> f.getFilmId() == film.getId())
+                .forEach(f -> genreByFilm.add(new Genre(f.getGenreId(), genreMap.get(f.getGenreId()).getName())));
 
         film.setGenres(genreByFilm);
 
-        film.getMpa().setName(mpaList.stream().filter(m -> m.getId() == film.getMpa().getId()).findAny().get().getName());
+        Map<Integer, RatingMpa> mpaMap = new HashMap<>();
+        mpaList.forEach(m -> mpaMap.put(m.getId(), m));
+
+        film.getMpa().setName(mpaMap.get(film.getMpa().getId()).getName());
 
         Set<Integer> likesByFilm = new HashSet<>();
-        likes.stream().filter(l -> l.getFilmId() == film.getId()).forEach(l -> likesByFilm.add(l.getUserId()));
-        film.setLikes(likesByFilm);
+        likes.stream()
+                .filter(l -> l.getFilmId() == film.getId())
+                .forEach(l -> likesByFilm.add(l.getUserId()));
 
+        film.setLikes(likesByFilm);
     }
 }

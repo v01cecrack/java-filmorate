@@ -49,6 +49,11 @@ public class InMemoryUserStorage implements UserStorage {
         throw new ObjectNotFoundException(String.format("Users id %d is not found", id));
     }
 
+    @Override
+    public Map<Integer, User> getUsersMap() {
+        return null;
+    }
+
     private int generateUserId() {
         return ++id;
     }

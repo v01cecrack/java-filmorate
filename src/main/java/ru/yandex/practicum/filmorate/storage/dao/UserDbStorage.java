@@ -98,6 +98,19 @@ public class UserDbStorage extends DbStorage implements UserStorage {
         return users;
     }
 
+    @Override
+    public Map<Integer,User> getUsersMap() {
+        Map<Integer,User> users = new HashMap<>();
+        String sql = "select id, email, login, name, birthday  from users";
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql);
+        while (sqlRowSet.next()) {
+            User user = mapToRow(sqlRowSet);
+            users.put(user.getId(), user);
+        }
+        log.info("Количество пользователей: {}", users.size());
+        return users;
+    }
+
     private User mapToRow(SqlRowSet sqlRowSet) {
         int id = sqlRowSet.getInt("id");
         String email = sqlRowSet.getString("email");

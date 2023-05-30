@@ -11,6 +11,7 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -77,11 +78,13 @@ public class UserService {
         viewCommonFriends(friendshipsByUser2, friendIdByUser2, otherId);
         friendIdByUser1.retainAll(friendIdByUser2);
         List<User> users = new ArrayList<>();
+        Map<Integer, User> userMap = userStorage.getUsersMap();
 
         for (var commonFriendId : friendIdByUser1) {
-            users.add(userStorage.findUserById(commonFriendId));
+            if (userMap.containsKey(commonFriendId)) {
+                users.add(userMap.get(commonFriendId));
+            }
         }
-
         return users;
     }
 
@@ -115,6 +118,7 @@ public class UserService {
     public List<User> getListOfFriends(int userId) {
         var friendships = friendshipStorage.getFriendsIdByUser(userId);
         List<User> users = new ArrayList<>();
+        Map<Integer, User> userMap = userStorage.getUsersMap();
 
         for (var friendship : friendships) {
             int friendId;
@@ -122,8 +126,9 @@ public class UserService {
                 friendId = friendship.getFriendId();
             else
                 friendId = friendship.getUserId();
-            var user = userStorage.findUserById(friendId);
-            users.add(user);
+            if (userMap.containsKey(friendId)) {
+                users.add(userMap.get(friendId));
+            }
         }
 
         return users;
