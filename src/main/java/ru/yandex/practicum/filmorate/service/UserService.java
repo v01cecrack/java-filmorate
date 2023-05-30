@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.Friendship;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.FriendshipStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
-import ru.yandex.practicum.filmorate.storage.dao.FriendshipDbStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,21 +16,21 @@ import java.util.List;
 public class UserService {
     @Qualifier("UserDbStorage")
     private final UserStorage userStorage;
-    private final FriendshipDbStorage friendshipDbStorage;
+    private final FriendshipStorage friendshipStorage;
 
     @Autowired
-    public UserService(@Qualifier("UserDbStorage") UserStorage userStorage, FriendshipDbStorage friendshipDbStorage) {
+    public UserService(@Qualifier("UserDbStorage") UserStorage userStorage, FriendshipStorage friendshipStorage) {
         this.userStorage = userStorage;
-        this.friendshipDbStorage = friendshipDbStorage;
+        this.friendshipStorage = friendshipStorage;
     }
 
 
     public Friendship addFriend(int userId, int friendId) {
-        var friendShip = friendshipDbStorage.getFriendsRelation(userId, friendId);
+        var friendShip = friendshipStorage.getFriendsRelation(userId, friendId);
 
         if (friendShip == null) {
             try {
-                return friendshipDbStorage.added(new Friendship(userId, friendId, false));
+                return friendshipStorage.added(new Friendship(userId, friendId, false));
             } catch (Exception e) {
                 throw new ObjectNotFoundException("Запись не найдена");
             }
@@ -38,14 +38,14 @@ public class UserService {
             return friendShip;
         } else if (friendShip.getFriendId() == userId) {
             friendShip.setStatus(true);
-            return friendshipDbStorage.update(friendShip);
+            return friendshipStorage.update(friendShip);
         }
 
         return friendShip;
     }
 
     public void deleteFriend(int userId, int friendId) {
-        var friendShip = friendshipDbStorage.getFriendsRelation(userId, friendId);
+        var friendShip = friendshipStorage.getFriendsRelation(userId, friendId);
 
         if (friendShip == null) {
             throw new ObjectNotFoundException("Запись не найдена");
@@ -55,42 +55,26 @@ public class UserService {
                     friendShip.setUserId(friendId);
                     friendShip.setFriendId(userId);
                     friendShip.setStatus(false);
-                    friendshipDbStorage.update(friendShip);
+                    friendshipStorage.update(friendShip);
                 } else {
                     friendShip.setStatus(false);
-                    friendshipDbStorage.update(friendShip);
+                    friendshipStorage.update(friendShip);
                 }
             } else {
                 if (friendShip.getUserId() == userId) {
-                    friendshipDbStorage.deleteById(friendShip);
+                    friendshipStorage.deleteById(friendShip);
                 }
             }
         }
     }
 
     public List<User> getMutualFriends(int id, int otherId) {
-        var friendshipsByUser1 = friendshipDbStorage.getFriendsIdByUser(id);
-        var friendshipsByUser2 = friendshipDbStorage.getFriendsIdByUser(otherId);
+        var friendshipsByUser1 = friendshipStorage.getFriendsIdByUser(id);
+        var friendshipsByUser2 = friendshipStorage.getFriendsIdByUser(otherId);
         List<Integer> friendIdByUser1 = new ArrayList<>();
         List<Integer> friendIdByUser2 = new ArrayList<>();
-        for (var friendshipsByUser : friendshipsByUser1) {
-            int userId;
-            if (friendshipsByUser.getUserId() == id)
-                userId = friendshipsByUser.getFriendId();
-            else
-                userId = friendshipsByUser.getUserId();
-            friendIdByUser1.add(userId);
-        }
-
-        for (var friendshipsByUser : friendshipsByUser2) {
-            int userId;
-            if (friendshipsByUser.getUserId() == otherId)
-                userId = friendshipsByUser.getFriendId();
-            else
-                userId = friendshipsByUser.getUserId();
-            friendIdByUser2.add(userId);
-        }
-
+        viewCommonFriends(friendshipsByUser1, friendIdByUser1, id);
+        viewCommonFriends(friendshipsByUser2, friendIdByUser2, otherId);
         friendIdByUser1.retainAll(friendIdByUser2);
         List<User> users = new ArrayList<>();
 
@@ -99,6 +83,17 @@ public class UserService {
         }
 
         return users;
+    }
+
+    private void viewCommonFriends(List<Friendship> list, List<Integer> listId, int id) {
+        for (var friendshipsByUser : list) {
+            int userId;
+            if (friendshipsByUser.getUserId() == id)
+                userId = friendshipsByUser.getFriendId();
+            else
+                userId = friendshipsByUser.getUserId();
+            listId.add(userId);
+        }
     }
 
     public User addUser(User user) {
@@ -118,7 +113,7 @@ public class UserService {
     }
 
     public List<User> getListOfFriends(int userId) {
-        var friendships = friendshipDbStorage.getFriendsIdByUser(userId);
+        var friendships = friendshipStorage.getFriendsIdByUser(userId);
         List<User> users = new ArrayList<>();
 
         for (var friendship : friendships) {

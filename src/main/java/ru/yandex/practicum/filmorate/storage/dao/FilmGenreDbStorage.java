@@ -28,7 +28,7 @@ public class FilmGenreDbStorage extends DbStorage implements FilmGenreStorage {
     }
 
     @Override
-    public List<FilmGenre> getLikesFilmId(int filmId) {
+    public List<FilmGenre> getGenresFilmId(int filmId) {
         List<FilmGenre> filmGenres = new ArrayList<>();
 
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("select filmid, genreid from FILMGENRE where FILMID = ?", filmId);

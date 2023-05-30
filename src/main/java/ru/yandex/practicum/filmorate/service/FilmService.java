@@ -82,7 +82,7 @@ public class FilmService {
 
         var mpaList = ratingMpaStorage.findAllRating();
         var genres = genreStorage.findAllGenres();
-        var filmGenres = filmGenreStorage.getLikesFilmId(film.getId());
+        var filmGenres = filmGenreStorage.getGenresFilmId(film.getId());
         var likes = likesStorage.getLikesFilmId(film.getId());
 
         setMpaGenreLikesForFilm(film, mpaList, genres, filmGenres, likes);
@@ -90,11 +90,7 @@ public class FilmService {
     }
 
     public Film updateFilm(Film film) {
-        try {
-            filmStorage.updateFilm(film);
-        } catch (Exception e) {
-            throw new ObjectNotFoundException("Такого фильма не существует!");
-        }
+        filmStorage.updateFilm(film);
         filmGenreStorage.deleteByFilmId(film.getId());
         addGenreForFilm(film);
         return film;

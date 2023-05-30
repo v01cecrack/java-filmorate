@@ -37,30 +37,35 @@ public class FilmController {
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public List<Film> getFilms() {
+        log.info("Выведен список фильмов");
         return filmService.getFilms();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Film getFilm(@PathVariable int id) {
+        log.info("Найден фильм с id=", id);
         return filmService.findFilmById(id);
     }
 
     @PutMapping("/{id}/like/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public void addLike(@PathVariable int id, @PathVariable int userId) {
+        log.info("Добавлен лайк");
         filmService.addLike(userId, id);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteLike(@PathVariable int id, @PathVariable int userId) {
+        log.info("Удален лайк");
         filmService.deleteLike(userId, id);
     }
 
     @GetMapping("/popular")
     @ResponseStatus(HttpStatus.OK)
     public List<Film> getTopFilms(@RequestParam(defaultValue = "10") int count) {
+        log.info("Выведен список топ фильмов");
         return filmService.getTopFilms(count);
     }
 

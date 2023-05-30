@@ -2,14 +2,14 @@ package ru.yandex.practicum.filmorate.storage.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Likes;
 import ru.yandex.practicum.filmorate.storage.LikesStorage;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Service
+@Component
 public class LikesDbStorage extends DbStorage implements LikesStorage {
 
     public LikesDbStorage(JdbcTemplate jdbcTemplate) {

@@ -18,12 +18,14 @@ public class MpaController {
 
     @GetMapping
     public List<RatingMpa> getMpaList() {
+        log.info("Получен список рейтингов");
         return filmService.getMpaList();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public RatingMpa getMpa(@PathVariable int id) {
+        log.info("Получен рейтинг с id = {}", id);
         return filmService.getMpa(id);
     }
 }
